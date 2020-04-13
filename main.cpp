@@ -25,6 +25,9 @@ Node* getSibling(Node* node);
 Node* getUncle(Node* node);
 void rotateLeft(Node* node);
 void rotateRight(Node* node);
+Node* insert(Node* node, Node* root);
+Node* insertRecurse(Node* node, Node* root);
+void insertRepairTree(Node* node);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -253,4 +256,59 @@ void rotateRight(Node* node) {
 	newNode -> parent = parent;
 }
 
+Node* insert(Node* node, Node* root) {
+	insertRecurse(node, root);
 
+	insertRepairTree(node);
+
+	root = node;
+	while (getParent(root)) {
+		root = getParent(root);
+	}
+	return root;
+}
+
+Node* insertRecurse(Node* node, Node* root) {
+	if(root) {
+		if(node -> data < root -> data) {
+			if(root -> left) {
+				insertRecurse(node, root -> left);
+				return;
+			}
+			else {
+				root -> left = node;
+			}
+		}
+		else {
+			if(root -> right) {
+				insertRecurse(node, root -> right);
+				return;
+			}
+			else {
+				root -> right = node;
+			}
+		}
+	}
+
+	node -> parent = root;
+	node -> left = NULL;
+	node -> right = NULL;
+	node -> redBlack = RED;
+}
+
+void insertRepairTree(Node* node) {
+	if(!getParent(node)) {
+		insertCase1(node);
+	}
+	else if (getParent(node) -> redBlack == BLACK) {
+		insertCase2(node);
+	}
+	else if (getUncle(node) && getUncle(node) -> redBlack == RED) {
+		insertCase3(node);
+	}
+	else {
+		insertCase4(node);
+	}
+}
+
+		
