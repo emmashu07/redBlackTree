@@ -176,6 +176,81 @@ void read(Node* root, int* array, int size) {
 
 }
 
+Node* getParent(Node* node) {
+	return node -> parent;
+}
+
+Node* getGrandparent(Node* node) {
+	return getParent(getParent(node));
+}
+
+Node* getSibling(Node* node) {
+	Node* parent = getParent(node);
+
+	if (!parent) {
+		return NULL;
+	}
+
+	if (node == parent -> left) {
+		return parent -> right;
+	}
+	else {
+		return parent -> left;
+	}
+}
+
+Node* getUncle(Node* node) {
+	Node* parent = getParent(node);
+	
+	return getSibling(parent);
+}
+
+void rotateLeft(Node* node) {
+	Node* newNode = node -> right;
+	Node* parent = node -> parent;
+
+	node -> right = newNode -> left;
+	newNode -> left = node;
+	node -> parent = newNode;
+
+	if (node -> right) {
+		node -> right -> parent = node;
+	}
+
+	if (parent) {
+		if (node == parent -> left) {
+			parent -> left = newNode;
+		}
+		else if (node == parent -> right) {
+			parent -> right = newNode;
+		}
+	}
+	
+	newNode -> parent = parent;
+}
+
+void rotateRight(Node* node) {
+	Node* newNode = node -> left;
+	Node* parent = node -> parent;
+
+	node -> left = newNode -> right;
+	newNode -> right = node;
+	node -> parent = newNode;
+
+	if (node -> left) {
+		node -> left -> parent = node;
+	}
+
+	if (parent) {
+		if (node == parent -> left) {
+			parent -> left = newNode;
+		}
+		else if (node == parent -> right) {
+			parent -> right = newNode;
+		}
+	}
+	
+	newNode -> parent = parent;
+}
 
 
-		
