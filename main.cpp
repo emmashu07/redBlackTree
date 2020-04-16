@@ -26,8 +26,13 @@ Node* getUncle(Node* node);
 void rotateLeft(Node* node);
 void rotateRight(Node* node);
 Node* insert(Node* node, Node* root);
-Node* insertRecurse(Node* node, Node* root);
+void insertRecurse(Node* node, Node* root);
 void insertRepairTree(Node* node);
+void insertCase1(Node* node);
+void insertCase2(Node* node);
+void insertCase3(Node* node);
+void insertCase4(Node* node);
+void insertCase4Step2(Node* node);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -57,7 +62,9 @@ int main() {
 			cout << "Please enter a number: ";
 			cin >> num;
 			cin.ignore(20, '\n');
-			//add(root, num);
+			Node* node;
+			node -> data = num;
+			insert(node, root);
 		}
 		else if (strcmp(input, "SEARCH") == 0) {
 			/*bool in;
@@ -176,7 +183,11 @@ void display(Node* currRoot) { // An inorder traversal of the tree.
 
 
 void read(Node* root, int* array, int size) {
-
+	for (int i = 0; i < size; i++) {
+		Node* temp;
+		temp -> data = array[i];
+		insert(temp, root);
+	}
 }
 
 Node* getParent(Node* node) {
@@ -268,7 +279,7 @@ Node* insert(Node* node, Node* root) {
 	return root;
 }
 
-Node* insertRecurse(Node* node, Node* root) {
+void insertRecurse(Node* node, Node* root) {
 	if(root) {
 		if(node -> data < root -> data) {
 			if(root -> left) {
@@ -311,4 +322,48 @@ void insertRepairTree(Node* node) {
 	}
 }
 
-		
+void insertCase1(Node* node) {	
+	node -> redBlack = BLACK;
+}
+
+void insertCase2(Node* node) {	
+	return;
+}
+
+void insertCase3(Node* node) {	
+	getParent(node) -> redBlack = BLACK;
+	getUncle(node) -> redBlack = BLACK;
+	getGrandparent(node) -> redBlack = RED;
+	insertRepairTree(getGrandparent(node));
+}
+
+void insertCase4(Node* node) {
+	Node* parent = getParent(node);
+	Node* grandparent = getGrandparent(node);
+
+	if (node == parent -> right && parent == grandparent -> left) {
+		rotateLeft(parent);
+		node = node -> left;
+	}
+	else if (node == parent -> left && parent == grandparent -> right) {
+		rotateRight(parent);
+		node = node -> right;
+	}
+
+	insertCase4Step2(node);
+}
+
+void insertCase4Step2(Node* node) {
+	Node* parent = getParent(node);
+	Node* grandparent = getGrandparent(node);
+
+	if (node == parent -> left) {
+		rotateRight(grandparent);
+	}
+	else {
+		rotateLeft(grandparent);
+	}
+
+	parent -> redBlack = BLACK;
+	grandparent -> redBlack = RED;
+}
