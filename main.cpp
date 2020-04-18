@@ -16,7 +16,7 @@ struct Node {
 int convertToInt(char* num);
 int inputToInt(char* input, int* array);
 int fileToInt(char* fileName, int* array);
-void read(Node* root, int* array, int size);
+Node* read(Node* root, int* array, int size);
 void display(Node* currRoot);
 void print(Node* currRoot, int tabNum);
 Node* getParent(Node* node);
@@ -50,7 +50,7 @@ int main() {
 	cin.ignore(50, '\n');
 	size = fileToInt(fileName, array);	
 
-	read(root, array, size);
+	root = read(root, array, size);
 
 	while (running) {
 		cout << "Please enter whether you would like to search, remove, insert, print, or quit: ";
@@ -62,7 +62,7 @@ int main() {
 			cout << "Please enter a number: ";
 			cin >> num;
 			cin.ignore(20, '\n');
-			Node* node;
+			Node* node = new Node();
 			node -> data = num;
 			insert(node, root);
 		}
@@ -176,18 +176,25 @@ void print(Node* currRoot, int tabNum) { // Print the tree.
 void display(Node* currRoot) { // An inorder traversal of the tree.
 	if (currRoot) {
 		display(currRoot -> left);
-		cout << currRoot -> data << ' ';
+		cout << currRoot -> data << " - ";
+		if (currRoot -> redBlack == RED) {
+			cout << "Red, ";
+		}
+		else {
+			cout << "Black, ";
+		}
 		display(currRoot -> right);
 	}
 }
 
 
-void read(Node* root, int* array, int size) {
+Node* read(Node* root, int* array, int size) {
 	for (int i = 0; i < size; i++) {
-		Node* temp;
+		Node* temp = new Node();
 		temp -> data = array[i];
-		insert(temp, root);
+		root = insert(temp, root);
 	}
+	return root;
 }
 
 Node* getParent(Node* node) {
@@ -268,11 +275,14 @@ void rotateRight(Node* node) {
 }
 
 Node* insert(Node* node, Node* root) {
-	insertRecurse(node, root);
+	if (root) {
+		insertRecurse(node, root);
+		insertRepairTree(node);
+	}
+	else {
+		root = node;
+	}
 
-	insertRepairTree(node);
-
-	root = node;
 	while (getParent(root)) {
 		root = getParent(root);
 	}
