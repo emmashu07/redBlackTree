@@ -64,7 +64,7 @@ int main() {
 			cin.ignore(20, '\n');
 			Node* node = new Node();
 			node -> data = num;
-			insert(node, root);
+			root = insert(node, root);
 		}
 		else if (strcmp(input, "SEARCH") == 0) {
 			/*bool in;
@@ -228,7 +228,7 @@ Node* getUncle(Node* node) {
 
 void rotateLeft(Node* node) {
 	Node* newNode = node -> right;
-	Node* parent = node -> parent;
+	Node* parent = getParent(node);
 
 	node -> right = newNode -> left;
 	newNode -> left = node;
@@ -252,7 +252,7 @@ void rotateLeft(Node* node) {
 
 void rotateRight(Node* node) {
 	Node* newNode = node -> left;
-	Node* parent = node -> parent;
+	Node* parent = getParent(node);
 
 	node -> left = newNode -> right;
 	newNode -> right = node;
