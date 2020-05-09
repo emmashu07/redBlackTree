@@ -33,6 +33,7 @@ void insertCase2(Node* node);
 void insertCase3(Node* node);
 void insertCase4(Node* node);
 void insertCase4Step2(Node* node);
+bool search(Node* currRoot, int num);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -67,7 +68,7 @@ int main() {
 			root = insert(node, root);
 		}
 		else if (strcmp(input, "SEARCH") == 0) {
-			/*bool in;
+			bool in;
 			int num;
 			cout << "Please enter a number: ";
 			cin >> num;
@@ -79,7 +80,7 @@ int main() {
 			}
 			else {
 				cout << "The number is not in the tree." << endl;
-			}*/	
+			}	
 		}
 		else if (strcmp(input, "REMOVE") == 0) {
 			/*bool in;
@@ -377,3 +378,20 @@ void insertCase4Step2(Node* node) {
 	parent -> redBlack = BLACK;
 	grandparent -> redBlack = RED;
 }
+
+bool search(Node* currRoot, int num) { 
+	if (!currRoot) {
+		return false;
+	}
+	else if (currRoot -> data == num) {
+		return true;
+	}
+	else if (currRoot -> data > num) {
+		return search(currRoot -> left, num);
+	}
+	else if (currRoot -> data < num) {
+		return search(currRoot -> right, num);
+	}
+}
+
+
