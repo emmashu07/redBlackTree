@@ -34,6 +34,9 @@ void insertCase3(Node* node);
 void insertCase4(Node* node);
 void insertCase4Step2(Node* node);
 bool search(Node* currRoot, int num);
+void replaceNode(Node* node, Node* child);
+void deleteOneChild(Node* node);
+void deleteCase1(Node* node); 
 
 const int BLACK = 0;
 const int RED = 1;
@@ -394,4 +397,39 @@ bool search(Node* currRoot, int num) {
 	}
 }
 
+void replaceNode(Node* node, Node* child) {
+	child -> parent = node -> parent;
+	if(node == node -> parent -> left) {
+		node -> parent -> left = child;
+	}
+	else {
+		node -> parent -> right = child;
+	}
+}
 
+void deleteOneChild(Node* node) {
+	Node* child = NULL;
+	if (!(node -> left)) {
+		child = node -> right;
+	}
+	else if (!(node -> right)) {
+		child = node -> left;
+	}
+
+	if (child) {
+		replaceNode(node, child);
+		if (node -> redBlack == BLACK) {
+			if (child -> redBlack == RED) {
+				child -> redBlack = BLACK;
+			}
+			else {
+				deleteCase1(child);
+			}
+		}
+		free(node);
+	}
+}
+			
+void deleteCase1(Node* node) {
+	
+}	
