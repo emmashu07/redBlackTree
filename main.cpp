@@ -39,6 +39,9 @@ void deleteOneChild(Node* node);
 void deleteCase1(Node* node); 
 void deleteCase2(Node* node);
 void deleteCase3(Node* node);
+void deleteCase4(Node* node);
+void deleteCase5(Node* node);
+void deleteCase6(Node* node);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -88,19 +91,22 @@ int main() {
 			}	
 		}
 		else if (strcmp(input, "REMOVE") == 0) {
-			/*bool in;
+			bool in;
 			int num;
 			cout << "Please enter a number: ";
 			cin >> num;
 			cout << endl;
 			cin.ignore(20, '\n');
-			in = remove(root, num);
+			in = search(root, num);
 			if (in) {
+				Node* node = new Node();
+				node -> data = num;
+				deleteOneChild(node);
 				cout << "Deleted." << endl;
 			}
 			else {
 				cout << "The number is not in the tree." << endl;
-			}*/
+			}
 		}	
 		else if (strcmp(input, "PRINT") == 0) {
 			print(root, 0);
@@ -455,5 +461,58 @@ void deleteCase2(Node* node) {
 }
 
 void deleteCase3(Node* node) {
+	Node* sibling = getSibling(node);
 
+	if (node -> parent -> redBlack == BLACK && sibling -> redBlack == BLACK && sibling -> left -> redBlack == BLACK && node -> right -> redBlack == BLACK) {
+		sibling -> redBlack = RED;
+		deleteCase1(node -> parent);
+	}
+	else {
+		deleteCase4(node);
+	}
+}
+
+void deleteCase4(Node* node) {
+	Node* sibling = getSibling(node);
+
+	if (node -> parent -> redBlack == RED && sibling -> redBlack == BLACK && sibling -> left -> redBlack == BLACK && node -> right -> redBlack == BLACK) {
+		sibling -> redBlack = RED;
+		node -> parent -> redBlack = BLACK;
+	}
+	else {
+		deleteCase5(node);
+	}
+}	
+
+void deleteCase5(Node* node) {
+	Node* sibling = getSibling(node);
+	
+	if (sibling -> redBlack == BLACK) {
+		if (node == node -> parent -> left && sibling -> right -> redBlack == BLACK && sibling -> left -> redBlack == RED) {
+			sibling -> redBlack = RED;
+			sibling -> left -> redBlack = BLACK;
+			rotateRight(sibling);
+		}
+		else if (node == node -> parent -> right && sibling -> left -> redBlack == BLACK && sibling -> right -> redBlack == RED) {
+			sibling -> redBlack = RED;
+			sibling -> right -> redBlack = BLACK;
+			rotateLeft(sibling);
+		}
+		deleteCase6(node);
+	}
+}
+
+void deleteCase6(Node* node) {
+	Node* sibling = getSibling(node);
+	sibling -> redBlack = node -> parent -> redBlack;
+	node -> parent -> redBlack = BLACK;
+
+	if (node == node -> parent -> left) {
+		sibling -> right -> redBlack = BLACK;
+		rotateLeft(node -> parent);
+	}
+	else {
+		sibling -> left -> redBlack = BLACK;
+		rotateRight(node -> parent);
+	}
 }
