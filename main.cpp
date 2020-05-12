@@ -42,6 +42,7 @@ void deleteCase3(Node* node);
 void deleteCase4(Node* node);
 void deleteCase5(Node* node);
 void deleteCase6(Node* node);
+Node* findNode(Node* currRoot, int num);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -99,9 +100,7 @@ int main() {
 			cin.ignore(20, '\n');
 			in = search(root, num);
 			if (in) {
-				Node* node = new Node();
-				node -> data = num;
-				deleteOneChild(node);
+				Node* node = findNode(root, num);
 				cout << "Deleted." << endl;
 			}
 			else {
@@ -405,6 +404,18 @@ bool search(Node* currRoot, int num) {
 	}
 }
 
+Node* findNode(Node* currRoot, int num) {
+	if (currRoot -> data == num) {
+		return currRoot;
+	}
+	else if (currRoot -> data > num) {
+		return findNode(currRoot -> left, num);
+	}
+	else if (currRoot -> data < num) {
+		return findNode(currRoot -> right, num);
+	}
+}
+
 void replaceNode(Node* node, Node* child) {
 	child -> parent = node -> parent;
 	if(node == node -> parent -> left) {
@@ -516,3 +527,4 @@ void deleteCase6(Node* node) {
 		rotateRight(node -> parent);
 	}
 }
+
