@@ -37,6 +37,8 @@ bool search(Node* currRoot, int num);
 void replaceNode(Node* node, Node* child);
 void deleteOneChild(Node* node);
 void deleteCase1(Node* node); 
+void deleteCase2(Node* node);
+void deleteCase3(Node* node);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -431,5 +433,27 @@ void deleteOneChild(Node* node) {
 }
 			
 void deleteCase1(Node* node) {
-	
+	if (node -> parent) {
+		deleteCase2(node);
+	}
 }	
+
+void deleteCase2(Node* node) {
+	Node* sibling = getSibling(node);
+
+	if(sibling -> redBlack == RED) {
+		node -> parent -> redBlack = RED;
+		sibling -> redBlack = BLACK;
+		if (node == node -> parent -> left) {
+			rotateLeft(node -> parent);
+		}
+		else {
+			rotateRight(node -> parent);
+		}
+	}
+	deleteCase3(node);
+}
+
+void deleteCase3(Node* node) {
+
+}
