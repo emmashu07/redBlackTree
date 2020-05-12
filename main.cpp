@@ -43,6 +43,7 @@ void deleteCase4(Node* node);
 void deleteCase5(Node* node);
 void deleteCase6(Node* node);
 Node* findNode(Node* currRoot, int num);
+void deleteCases(Node* node);
 
 const int BLACK = 0;
 const int RED = 1;
@@ -101,6 +102,7 @@ int main() {
 			in = search(root, num);
 			if (in) {
 				Node* node = findNode(root, num);
+				deleteCases(node);
 				cout << "Deleted." << endl;
 			}
 			else {
@@ -528,3 +530,12 @@ void deleteCase6(Node* node) {
 	}
 }
 
+void deleteCases(Node* node) {
+	if (node -> redBlack == RED) {
+		delete node;
+		node = NULL;
+	}
+	else {
+		deleteOneChild(node);
+	}
+}
